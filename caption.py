@@ -16,13 +16,14 @@ model_name = "aubmindlab/bert-base-arabertv2"
 arabert_prep = ArabertPreprocessor(model_name=model_name)
 
 
-def caption_image(upload, img_path='test.png', beam_size=3):
+def caption_image(upload=None, img_path='test.png', beam_size=3):
     # saving image
-    if len(upload.data) < 1:
-        return "You need to upload an image!!!"
-    else:
-        with open("test.png", "w+b") as i:
-            i.write(upload.data[0])
+    if upload != None:
+        if len(upload.data) < 1:
+            return "You need to upload an image!!!"
+        else:
+            with open("test.png", "w+b") as i:
+                i.write(upload.data[0])
 
     # transforms
     tt = transforms.Compose([
@@ -40,7 +41,7 @@ def caption_image(upload, img_path='test.png', beam_size=3):
 
     # arabic
     vocab = build_vocab('ar_data.json')
-    checkpoint = load_checkpoint('BEST_checkpoint_flickr8k_ar_arabert_finetune.pth.tar', cpu=True)
+    checkpoint = load_checkpoint('BEST_checkpoint_flickr8k_ar_arabert_pretrained_finetune.pth.tar', cpu=True)
 
 
     addit_tokens = [vocab.stoi['<sos>'], vocab.stoi['<eos>'], vocab.stoi['<pad>']]

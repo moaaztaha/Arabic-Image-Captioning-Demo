@@ -42,11 +42,11 @@ def server_error(e):
 @app.route("/", methods=['GET'])
 def startup():
     # downloading the model
-    if Path('BEST_checkpoint_flickr8k_ar_arabert_finetune.pth.tar').is_file():
+    if Path('BEST_checkpoint_flickr8k_ar_arabert_pretrained_finetune.pth.tar').is_file():
         print("Model file exists!!!")
     else:
         print("Downloading model...")
-        os.system('gdown --id 1-iVSv8ZVBEmPfe_1AbrshmNDqPZmE5-C')
+        os.system('gdown --id 1-6o5yt2oMrgJBlKA_pToQqXpntI-ZYoB')
     return render_template('index.html') # pred_class
 
 from caption import caption_image
@@ -62,7 +62,7 @@ def predict():
         # caps = [ind_str[x] for x in caps]
         # return ' '.join(caps)#jsonify(predict=str(pred_class))
                 #app.logger.info("Image %s classified as %s" % (url, pred_class))
-        caps = caption_image(upload_path)
+        caps = caption_image(img_path=upload_path)
         print(caps)
         return caps
     return None
