@@ -42,7 +42,11 @@ def server_error(e):
 @app.route("/", methods=['GET'])
 def startup():
     # downloading the model
-    os.system('gdown --id 1-iVSv8ZVBEmPfe_1AbrshmNDqPZmE5-C')
+    if Path('BEST_checkpoint_flickr8k_ar_arabert_finetune.pth.tar').is_file():
+        print("Model file exists!!!")
+    else:
+        print("Downloading model...")
+        os.system('gdown --id 1-iVSv8ZVBEmPfe_1AbrshmNDqPZmE5-C')
     return render_template('index.html') # pred_class
 
 from caption import caption_image

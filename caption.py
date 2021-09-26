@@ -16,7 +16,7 @@ model_name = "aubmindlab/bert-base-arabertv2"
 arabert_prep = ArabertPreprocessor(model_name=model_name)
 
 
-def caption_image(img_path, beam_size=3):
+def caption_image(img_path='test.png', beam_size=3):
     
     # transforms
     tt = transforms.Compose([
