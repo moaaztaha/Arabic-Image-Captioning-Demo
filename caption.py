@@ -3,7 +3,6 @@ import torch.nn.functional as F
 import numpy as np
 import json
 import torchvision.transforms as transforms
-import matplotlib.pyplot as plt
 from PIL import Image
 
 from dataset import build_vocab
