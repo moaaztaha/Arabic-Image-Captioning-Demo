@@ -16,8 +16,14 @@ model_name = "aubmindlab/bert-base-arabertv2"
 arabert_prep = ArabertPreprocessor(model_name=model_name)
 
 
-def caption_image(img_path='test.png', beam_size=3):
-    
+def caption_image(upload, img_path='test.png', beam_size=3):
+    # saving image
+    if len(upload.data) < 1:
+        return "You need to upload an image!!!"
+    else:
+        with open("test.png", "w+b") as i:
+            i.write(upload.data[0])
+
     # transforms
     tt = transforms.Compose([
         transforms.Resize(256),
