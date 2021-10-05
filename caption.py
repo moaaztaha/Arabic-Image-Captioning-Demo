@@ -16,7 +16,7 @@ model_name = "aubmindlab/bert-base-arabertv2"
 arabert_prep = ArabertPreprocessor(model_name=model_name)
 
 
-def caption_image(upload=None, img_path='test.png', beam_size=3):
+def caption_image(upload=None, img_path='test.png', beam_size=3, old=False):
     # saving image
     if upload != None:
         if len(upload.data) < 1:
@@ -35,14 +35,16 @@ def caption_image(upload=None, img_path='test.png', beam_size=3):
     ])
 
 
-    # english
-    # vocab = build_vocab('data.json')
-    # checkpoint = load_checkpoint('E:\GP\Image-Captioning\models\BEST_checkpoint_flickr8k_finetune.pth.tar', cpu=True)
 
-    # arabic
-    vocab = build_vocab('ar_data.json')
-    checkpoint = load_checkpoint('BEST_checkpoint_flickr8k_ar_arabert_pretrained_finetune.pth.tar', cpu=True)
 
+    if old:
+        # old
+        vocab = build_vocab('old_ar_data.json')
+        checkpoint = load_checkpoint('BEST_checkpoint_flickr8k_ar_pretrained_finetune.pth.tar', cpu=True)
+    else:
+        # arabert
+        vocab = build_vocab('ar_data.json')
+        checkpoint = load_checkpoint('BEST_checkpoint_flickr8k_ar_arabert_pretrained_finetune.pth.tar', cpu=True)
 
     addit_tokens = [vocab.stoi['<sos>'], vocab.stoi['<eos>'], vocab.stoi['<pad>']]
     device = torch.device( 'cpu')
