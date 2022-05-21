@@ -166,8 +166,15 @@ def caption_image(upload=None, img_path='test.png', beam_size=3, old=False):
 
 
 
-def caption_image_viz(img_path, beam_size=3, old=False):
-    
+def caption_image_viz(upload, beam_size=3, old=False):
+    img_path = 'test.png'
+    # saving image
+    if upload != None:
+        if len(upload.data) < 1:
+            return "You need to upload an image!!!"
+        else:
+            with open(img_path, "w+b") as i:
+                i.write(upload.data[0])
     # transforms
     tt = transforms.Compose([
         transforms.Resize(256),
@@ -320,7 +327,7 @@ def caption_image_viz(img_path, beam_size=3, old=False):
     return alphas, seq, all_caps
 
 
-def visualize_att(image_path, seq, alphas, smooth=True, old=False):
+def visualize_att(seq, alphas, smooth=True, old=False):
     """
     Visualizes caption with weights at every word.
     Adapted from paper authors' repo: https://github.com/kelvinxu/arctic-captions/blob/master/alpha_visualization.ipynb
@@ -330,6 +337,7 @@ def visualize_att(image_path, seq, alphas, smooth=True, old=False):
     :param rev_word_map: reverse word mapping, i.e. ix2word
     :param smooth: smooth weights?
     """
+    image_path = "test.png"
     image = Image.open(image_path)
     image = image.resize([14 * 24, 14 * 24], Image.LANCZOS)
 
