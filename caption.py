@@ -315,7 +315,7 @@ def caption_image_viz(upload, beam_size=3, old=False):
     seq = complete_seqs[i]
     alphas = complete_seqs_alpha[i]
 
-    print(complete_seqs_scores)
+    # print(complete_seqs_scores)
     # print(seq)
     all_caps = [" ".join([vocab.itos[i] for i in sent if i not in addit_tokens]) for sent in complete_seqs]
     # all_b_caps = ""
