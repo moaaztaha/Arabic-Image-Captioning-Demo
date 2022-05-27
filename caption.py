@@ -362,7 +362,7 @@ def visualize_att(seq, alphas, smooth=True, old=False, eng=False):
           # arabert
           vocab = build_vocab('ar_data.json')
 
-    addit_tokens = [vocab.stoi['<sos>'], vocab.stoi['<eos>'], vocab.stoi['<pad>']]
+    addit_tokens = [vocab.stoi['<eos>'], vocab.stoi['<pad>']]
     
     words = [vocab.itos[i] for i in seq if i not in addit_tokens]
 
