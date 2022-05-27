@@ -23,7 +23,7 @@ model_name = "aubmindlab/bert-base-arabertv2"
 arabert_prep = ArabertPreprocessor(model_name=model_name)
 
 
-def caption_image(upload=None, img_path='test.png', beam_size=3, old=False):
+def caption_image(upload=None, img_path='test.png', beam_size=3, old=False, eng=False):
     # saving image
     if upload != None:
         if len(upload.data) < 1:
@@ -43,15 +43,19 @@ def caption_image(upload=None, img_path='test.png', beam_size=3, old=False):
 
 
 
-
-    if old:
-        # old
-        vocab = build_vocab('old_ar_data.json')
-        checkpoint = load_checkpoint('BEST_checkpoint_flickr8k_ar_pretrained_finetune.pth.tar', cpu=True)
-    else:
-        # arabert
-        vocab = build_vocab('ar_data.json')
-        checkpoint = load_checkpoint('BEST_checkpoint_flickr8k_ar_arabert_pretrained_finetune.pth.tar', cpu=True)
+    if eng:
+      # english
+      vocab = build_vocab('data.json')
+      checkpoint = load_checkpoint('BEST_checkpoint_flickr8k_finetune.pth.tar', cpu=True)
+    else:  
+      if old:
+          # old
+          vocab = build_vocab('old_ar_data.json')
+          checkpoint = load_checkpoint('BEST_checkpoint_flickr8k_ar_pretrained_finetune.pth.tar', cpu=True)
+      else:
+          # arabert
+          vocab = build_vocab('ar_data.json')
+          checkpoint = load_checkpoint('BEST_checkpoint_flickr8k_ar_arabert_pretrained_finetune.pth.tar', cpu=True)
 
     addit_tokens = [vocab.stoi['<sos>'], vocab.stoi['<eos>'], vocab.stoi['<pad>']]
     device = torch.device( 'cpu')
@@ -162,11 +166,13 @@ def caption_image(upload=None, img_path='test.png', beam_size=3, old=False):
     i = complete_seqs_scores.index(max(complete_seqs_scores))
     seq = complete_seqs[i]
 
+    if eng:
+      return " ".join([vocab.itos[i] for i in seq[1:-1]])
     return arabert_prep.unpreprocess(" ".join([vocab.itos[i] for i in seq[1:-1]]))
 
 
 
-def caption_image_viz(upload, beam_size=3, old=False):
+def caption_image_viz(upload, beam_size=3, old=False, eng=False):
     img_path = 'test.png'
     # saving image
     if upload != None:
@@ -184,15 +190,19 @@ def caption_image_viz(upload, beam_size=3, old=False):
                             std=[0.229, 0.224, 0.225]),
     ])
 
-
-    if old:
-            # old
-        vocab = build_vocab('old_ar_data.json')
-        checkpoint = load_checkpoint('BEST_checkpoint_flickr8k_ar_pretrained_finetune.pth.tar', cpu=True)
+    if eng:
+      # english
+      vocab = build_vocab('data.json')
+      checkpoint = load_checkpoint('BEST_checkpoint_flickr8k_finetune.pth.tar', cpu=True)
     else:
-        # arabert
-        vocab = build_vocab('ar_data.json')
-        checkpoint = load_checkpoint('BEST_checkpoint_flickr8k_ar_arabert_pretrained_finetune.pth.tar', cpu=True)
+      if old:
+              # old
+          vocab = build_vocab('old_ar_data.json')
+          checkpoint = load_checkpoint('BEST_checkpoint_flickr8k_ar_pretrained_finetune.pth.tar', cpu=True)
+      else:
+          # arabert
+          vocab = build_vocab('ar_data.json')
+          checkpoint = load_checkpoint('BEST_checkpoint_flickr8k_ar_arabert_pretrained_finetune.pth.tar', cpu=True)
 
     addit_tokens = [vocab.stoi['<sos>'], vocab.stoi['<eos>'], vocab.stoi['<pad>']]
     device = torch.device( 'cpu')
@@ -327,7 +337,7 @@ def caption_image_viz(upload, beam_size=3, old=False):
     return alphas, seq, all_caps
 
 
-def visualize_att(seq, alphas, smooth=True, old=False):
+def visualize_att(seq, alphas, smooth=True, old=False, eng=False):
     """
     Visualizes caption with weights at every word.
     Adapted from paper authors' repo: https://github.com/kelvinxu/arctic-captions/blob/master/alpha_visualization.ipynb
@@ -341,12 +351,16 @@ def visualize_att(seq, alphas, smooth=True, old=False):
     image = Image.open(image_path)
     image = image.resize([14 * 24, 14 * 24], Image.LANCZOS)
 
-    if old:
-            # old
-        vocab = build_vocab('old_ar_data.json')
+    if eng:
+      # english
+      vocab = build_vocab('data.json')
     else:
-        # arabert
-        vocab = build_vocab('ar_data.json')
+      if old:
+              # old
+          vocab = build_vocab('old_ar_data.json')
+      else:
+          # arabert
+          vocab = build_vocab('ar_data.json')
 
     addit_tokens = [vocab.stoi['<sos>'], vocab.stoi['<eos>'], vocab.stoi['<pad>']]
     
